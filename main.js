@@ -76,13 +76,11 @@ function openOffer(item) {
     item.classList.add('is-selected');
     item.setAttribute('aria-expanded', 'true');
     description.classList.add('is-open');
-
-    // Il messaggio di contatto NON viene aperto qui.
-    // Compare solo passando sopra il messaggio stesso.
+    contactMessage?.classList.add('is-open');
 }
 
 offerItems.forEach((item, index) => {
-    const { description, contactMessage } = getOfferElements(item);
+    const { description } = getOfferElements(item);
 
     if (!description) return;
 
@@ -120,15 +118,4 @@ offerItems.forEach((item, index) => {
             openOffer(item);
         }
     });
-
-    // SOLO PASSANDO SOPRA IL MESSAGGIO DI CONTATTO
-    if (contactMessage) {
-        contactMessage.addEventListener('mouseenter', () => {
-            contactMessage.classList.add('is-open');
-        });
-
-        contactMessage.addEventListener('mouseleave', () => {
-            contactMessage.classList.remove('is-open');
-        });
-    }
 });
