@@ -119,3 +119,74 @@ offerItems.forEach((item, index) => {
         }
     });
 });
+
+const processItems = document.querySelectorAll('.process-panel ol li');
+
+function getProcessDetail(item) {
+    return item.querySelector('.process-detail');
+}
+
+function closeProcessItem(item) {
+    const detail = getProcessDetail(item);
+
+    item.classList.remove('is-selected');
+    item.setAttribute('aria-expanded', 'false');
+    detail?.classList.remove('is-open');
+}
+
+function openProcessItem(item) {
+    const detail = getProcessDetail(item);
+
+    if (!detail) return;
+
+    processItems.forEach((otherItem) => {
+        if (otherItem !== item) {
+            closeProcessItem(otherItem);
+        }
+    });
+
+    item.classList.add('is-selected');
+    item.setAttribute('aria-expanded', 'true');
+    detail.classList.add('is-open');
+}
+
+processItems.forEach((item, index) => {
+    const detail = getProcessDetail(item);
+
+    if (!detail) return;
+
+    detail.id = `process-detail-${index + 1}`;
+
+    item.setAttribute('role', 'button');
+    item.setAttribute('tabindex', '0');
+    item.setAttribute('aria-expanded', 'false');
+    item.setAttribute('aria-controls', detail.id);
+
+    // PASSAGGIO DEL MOUSE SUL PASSAGGIO
+    item.addEventListener('mouseenter', () => {
+        if (window.innerWidth > 720) {
+            openProcessItem(item);
+        }
+    });
+
+    // MOBILE
+    item.addEventListener('click', () => {
+        if (window.innerWidth <= 720) {
+            const isOpen = detail.classList.contains('is-open');
+
+            if (isOpen) {
+                closeProcessItem(item);
+            } else {
+                openProcessItem(item);
+            }
+        }
+    });
+
+    // TASTIERA
+    item.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            openProcessItem(item);
+        }
+    });
+});
